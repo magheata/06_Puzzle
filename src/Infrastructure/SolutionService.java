@@ -6,30 +6,37 @@ import Domain.ShiftDirection;
 import Domain.Tile;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class SolutionService {
 
     private Node startingNode;
-
+    private ExecutorService executor;
     public SolutionService(ArrayList<Tile> grid, int size) {
         this.startingNode = new Node(grid, size);
+        executor = Executors.newSingleThreadExecutor();
     }
 
-    public ArrayList<ShiftDirection> getWinningNodes(){
-        return idaWinningMoves();
+    public Future<ArrayList<ShiftDirection>> getWinningNodes(){
+        return executor.submit(() -> idaWinningMoves());
     }
 
     private ArrayList<ShiftDirection> idaWinningMoves() {
         int threshold = startingNode.cost();
         Node node = startingNode;
-
         while(!node.isSolution()){
             node = ida(startingNode, 0, threshold);
             if (!node.isSolution()){
                 threshold = node.getEstimatedMinimumCost();
             }
         }
-        return recreatePathFrom(node);
+        System.out.println("Done");
+        ArrayList<ShiftDirection> moves = recreatePathFrom(node);
+        Collections.reverse(moves);
+        return moves;
     }
 
     private Node ida (Node node, int cost, int threshold){
@@ -56,26 +63,25 @@ public class SolutionService {
     private ArrayList<ShiftDirection> getPossibleMovesWithoutReversals(Node node, Tile blankTile) {
         ArrayList<ShiftDirection> possibleMoves = blankTile.possibleMoveDirections();
         ShiftDirection reverseMove = null;
-
         ShiftDirection previousMove = node.getPreviousMove();
-
-        switch (previousMove){
-            case UP:
-                reverseMove = ShiftDirection.DOWN;
-                break;
-            case DOWN:
-                reverseMove = ShiftDirection.UP;
-                break;
-            case LEFT:
-                reverseMove = ShiftDirection.RIGHT;
-                break;
-            case RIGHT:
-                reverseMove = ShiftDirection.LEFT;
-                break;
-        }
-
-        if (possibleMoves.contains(reverseMove)){
-            possibleMoves.remove(reverseMove);
+        if (previousMove != null){
+            switch (previousMove){
+                case UP:
+                    reverseMove = ShiftDirection.DOWN;
+                    break;
+                case DOWN:
+                    reverseMove = ShiftDirection.UP;
+                    break;
+                case LEFT:
+                    reverseMove = ShiftDirection.RIGHT;
+                    break;
+                case RIGHT:
+                    reverseMove = ShiftDirection.LEFT;
+                    break;
+            }
+            if (possibleMoves.contains(reverseMove)){
+                possibleMoves.remove(reverseMove);
+            }
         }
         return possibleMoves;
     }
@@ -94,7 +100,7 @@ public class SolutionService {
     }
 
     private Node getChildOfNodeAndMove(Node node, ShiftDirection move){
-        Node childNode = new Node(new ArrayList<>(node.getGrid()), node.getSize());
+        Node childNode = new Node(node.getGridClone(), node.getSize());
         childNode.getBoard().shift(move);
         childNode.setPreviousMove(move);
         childNode.setPreviousNode(node);

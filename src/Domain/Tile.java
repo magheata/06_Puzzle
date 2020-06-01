@@ -3,7 +3,7 @@ package Domain;
 
 import java.util.ArrayList;
 
-public class Tile {
+public class Tile implements Cloneable{
 
     private Position position;
     private int value, goalValue;
@@ -37,8 +37,23 @@ public class Tile {
     }
 
     @Override
+    protected Object clone() {
+        Tile clone;
+        try
+        {
+            clone = (Tile) super.clone();
+            //Copy new date object to cloned method
+        }
+        catch (CloneNotSupportedException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return clone;
+    }
+
+    @Override
     public String toString() {
-        return "[" + value + ']';
+        return "[" + goalValue + ']';
     }
 
     //region SETTERS & GETTERS

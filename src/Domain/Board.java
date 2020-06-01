@@ -6,9 +6,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Board {
+    public ArrayList<Tile> getTiles() {
+        return tiles;
+    }
+
     private ArrayList<Tile> tiles;
     private Map<Integer, Tile> tileForValue;
     private Map<Position, Tile> tileForPosition;
+
+    public int getSize() {
+        return size;
+    }
+
     private int size;
     private ShiftDirection previousMove;
     private int movesCount = 0;
@@ -23,14 +32,17 @@ public class Board {
         tileForValue = new HashMap<>();
         tileForPosition = new HashMap<>();
         for (Tile tile: tiles){
-            tileForValue.put(tile.getValue(), tile);
+            tileForValue.put(tile.getGoalValue(), tile);
             tileForPosition.put(tile.getPosition(), tile);
         }
-        System.out.println(getBlankTile().getPosition());
-        System.out.println(this);
     }
 
     public boolean getIsWinning() {
+        for (Tile tile: tiles){
+            if (tile.getValue() != tile.getGoalValue()){
+                return false;
+            }
+        }
         return true;
     }
 
@@ -54,7 +66,7 @@ public class Board {
         return tileForValue.get(0);
     }
 
-    public void shift(ShiftDirection move) {
+    public boolean shift(ShiftDirection move) {
         Tile blankTile = getBlankTile();
         Tile neighbourToSwap = null;
         switch (move){
@@ -74,7 +86,9 @@ public class Board {
         if (neighbourToSwap != null){
             movesCount++;
             replaceTiles(blankTile, neighbourToSwap);
+            return true;
         }
+        return false;
     }
 
     private void replaceTiles(Tile firstTile, Tile secondTile){
@@ -85,14 +99,15 @@ public class Board {
         int secondTileValue = secondTile.getValue();
 
         firstTile.setPosition(secondTilePos);
+        firstTile.setValue(secondTileValue);
 
         secondTile.setPosition(firstTilePos);
+        secondTile.setValue(firstTileValue);
 
         replaceTileForPosition(firstTilePos, secondTile);
         replaceTileForPosition(secondTilePos, firstTile);
 
         setNeighbourTiles(new ArrayList<>(tileForPosition.values()));
-
     }
 
     public void setNeighbourTiles(ArrayList<Tile> tiles){
@@ -103,7 +118,7 @@ public class Board {
             Position bottom = new Position(tile.getPosition().getX(), tile.getPosition().getY() + 1);
             tile.setBottomTile(getTileForPosition(bottom));
 
-            Position left = new Position(tile.getPosition().getX() - 1, tile.getPosition().getY() + 1);
+            Position left = new Position(tile.getPosition().getX() - 1, tile.getPosition().getY());
             tile.setLeftTile(getTileForPosition(left));
 
             Position right = new Position(tile.getPosition().getX() + 1, tile.getPosition().getY());

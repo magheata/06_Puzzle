@@ -2,6 +2,7 @@
 package Domain;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Node {
 
@@ -11,11 +12,13 @@ public class Node {
     private Node previousNode;
     private Board board;
     private int estimatedMinimumCost = Integer.MAX_VALUE;
+    private boolean okay = false;
 
     public Node(ArrayList<Tile> grid, int size) {
         this.grid = grid;
         this.size = size;
         this.board = new Board(grid, size);
+        board.setNeighbourTiles(grid);
     }
 
     public boolean isSolution(){
@@ -27,6 +30,16 @@ public class Node {
             CostTranspositionTable.transpositionTable.put(this, board.getManhattanDistance());
         }
         return CostTranspositionTable.transpositionTable.get(this);
+    }
+
+    public ArrayList<Tile> getGridClone(){
+        ArrayList<Tile> clonedGrid = new ArrayList<>();
+        Iterator iterator = grid.iterator();
+
+        while (iterator.hasNext()){
+            clonedGrid.add((Tile)((Tile)iterator.next()).clone());
+        }
+        return clonedGrid;
     }
 
     //region GETTERS & SETTERS
@@ -76,6 +89,14 @@ public class Node {
 
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+    public boolean isOkay() {
+        return okay;
+    }
+
+    public void setOkay(boolean okay) {
+        this.okay = okay;
     }
     //endregion
 }

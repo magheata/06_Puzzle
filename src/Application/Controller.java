@@ -5,15 +5,22 @@ import Domain.Board;
 import Domain.Position;
 import Domain.ShiftDirection;
 import Domain.Tile;
+import Infrastructure.SolutionService;
+import Presentation.Window;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class Controller {
 
     private int size = Constants.DEFAULT_BOARD_SIZE;
+    private Window window;
     private Board board;
     private ArrayList<Tile> tiles;
+    private SolutionService solutionService;
 
     public void start(){
         prepare();
@@ -36,6 +43,16 @@ public class Controller {
 
     private void performAIMoves(ArrayList<ShiftDirection> moves) {
         board.shuffle(moves);
+        solutionService = new SolutionService(board.getTiles(), board.getSize());
+        Future<ArrayList<ShiftDirection>> winningMoves = solutionService.getWinningNodes();
+        while (!winningMoves.isDone()){}
+        try {
+            System.out.println(winningMoves.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     private void prepare() {
@@ -54,5 +71,14 @@ public class Controller {
         }
         board = new Board(tiles, size);
         board.setNeighbourTiles(tiles);
+    }
+
+
+    public Window getWindow() {
+        return window;
+    }
+
+    public void setWindow(Window window) {
+        this.window = window;
     }
 }
