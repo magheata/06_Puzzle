@@ -4,5 +4,5 @@ public enum ShiftDirection {
     UP,
     DOWN,
     RIGHT,
-    LEFT;
+    LEFT
 }

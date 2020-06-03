@@ -7,10 +7,15 @@ public class Constants {
 
     public static int DEFAULT_BOARD_SIZE = 3;
 
-    public static int WIDTH_WINDOW = 700;
-    public static int HEIGHT_WINDOW = 700;
+    public static int WIDTH_WINDOW = 600;
+    public static int HEIGHT_WINDOW = 645;
+    public static int WIDTH_BOARD = 600;
+    public static int HEIGHT_BOARD = 600;
+
+    public static int TILE_SIZE = WIDTH_BOARD / DEFAULT_BOARD_SIZE;
 
     public static Dimension DIM_WINDOW = new Dimension(WIDTH_WINDOW, HEIGHT_WINDOW);
+    public static Dimension DIM_BOARD = new Dimension(WIDTH_BOARD, HEIGHT_BOARD);
 
     public static String TEXT_PUZZLE_MENU = "Puzzle";
     public static String TEXT_NEW_PUZZLE_ITEM = "New...";
@@ -37,6 +42,7 @@ public class Constants {
     public final static String PATH_ALGORITHM_ICON = "src/Presentation/Images/algorithm.png";
 
 
-
+    public static final Color FG_COLOR = new Color(0xFFFFFF);
+    public static final Color BG_COLOR = new Color(0x3B5998);
 
 }

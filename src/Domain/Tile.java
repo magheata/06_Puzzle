@@ -33,7 +33,26 @@ public class Tile implements Cloneable{
     }
 
     public boolean equals (Tile tile){
-        return (this.position.getX() == tile.position.getX()) && (this.position.getY() == tile.position.getY());
+        if (tile != null){
+            return (this.position.getX() == tile.position.getX()) && (this.position.getY() == tile.position.getY());
+        }
+        return false;
+    }
+
+    public ShiftDirection isTileNeighbour(Tile tile){
+        if (tile.equals(upTile)){
+            return ShiftDirection.DOWN;
+        }
+        if (tile.equals(rightTile)){
+            return ShiftDirection.LEFT;
+        }
+        if (tile.equals(bottomTile)){
+            return ShiftDirection.UP;
+        }
+        if (tile.equals(leftTile)){
+            return ShiftDirection.RIGHT;
+        }
+        return null;
     }
 
     @Override

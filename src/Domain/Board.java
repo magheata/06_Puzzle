@@ -6,18 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Board {
-    public ArrayList<Tile> getTiles() {
-        return tiles;
-    }
 
     private ArrayList<Tile> tiles;
     private Map<Integer, Tile> tileForValue;
     private Map<Position, Tile> tileForPosition;
-
-    public int getSize() {
-        return size;
-    }
-
     private int size;
     private ShiftDirection previousMove;
     private int movesCount = 0;
@@ -126,7 +118,7 @@ public class Board {
         }
     }
 
-    private Tile getTileForPosition(Position pos){
+    public Tile getTileForPosition(Position pos){
         for (Position position : tileForPosition.keySet()){
             if (pos.samePosition(position)){
                 return tileForPosition.get(position);
@@ -184,5 +176,13 @@ public class Board {
             }
         }
         return null;
+    }
+
+    public ArrayList<Tile> getTiles() {
+        return tiles;
+    }
+
+    public int getSize() {
+        return size;
     }
 }

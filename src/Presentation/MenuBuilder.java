@@ -9,6 +9,8 @@ import Config.Constants;
 
 import javax.swing.*;
 import javax.swing.undo.UndoManager;
+import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.*;
 
 public class MenuBuilder {
@@ -70,85 +72,32 @@ public class MenuBuilder {
     public static final Map<String, JMenuItem> MENU_ITEMS = new HashMap<>();
 
 
-    /*
     public static final Map<String, ActionListener> MENU_ACTIONLISTENERS = Map.ofEntries(
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_UNDO_ITEM, undoAction),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_REDO_ITEM, redoAction),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_NEW_FILE_ITEM, e -> controller.resetNotepad(true)),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_NEW_FROM_EXISTING_ITEM, e -> controller.openFileChooser(true)),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_OPEN_FILE_ITEM, e -> controller.openFileChooser(false)),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_ENABLE_SUGGESTIONS_ITEM, e -> {
-                if (MENU_ITEMS.get(Constants.TEXT_ENABLE_SUGGESTIONS_ITEM).getText().equals(Constants.TEXT_ENABLE_SUGGESTIONS_ITEM)){
-                    MENU_ITEMS.get(Constants.TEXT_ENABLE_SUGGESTIONS_ITEM).setText(Constants.TEXT_DISABLE_SUGGESTIONS_ITEM);
+            new AbstractMap.SimpleEntry<>(Constants.TEXT_NEW_PUZZLE_ITEM, e -> controller.prepare()),
+            new AbstractMap.SimpleEntry<>(Constants.TEXT_IMPORT_PUZZLE_ITEM, e -> System.out.println()),
+            new AbstractMap.SimpleEntry<>(Constants.TEXT_SHUFFLE_ITEM, e -> controller.shuffleInitialTiles()),
+            new AbstractMap.SimpleEntry<>(Constants.TEXT_SOLVE_ITEM, e -> controller.solvePuzzle()),
+            new AbstractMap.SimpleEntry<>(Constants.TEXT_RESET_ITEM, e -> System.out.println()),
+            new AbstractMap.SimpleEntry<>(Constants.TEXT_ENABLE_HINTS_ITEM, e -> {
+                if (MENU_ITEMS.get(Constants.TEXT_ENABLE_HINTS_ITEM).getText().equals(Constants.TEXT_ENABLE_HINTS_ITEM)){
+                    MENU_ITEMS.get(Constants.TEXT_ENABLE_HINTS_ITEM).setText(Constants.TEXT_DISABLE_HINTS_ITEM);
+                    MENU_ITEMS.get(Constants.TEXT_ENABLE_HINTS_ITEM).setIcon(new ImageIcon(MENU_ICONS.get(Constants.TEXT_DISABLE_HINTS_ITEM)));
+
                 } else {
-                    MENU_ITEMS.get(Constants.TEXT_ENABLE_SUGGESTIONS_ITEM).setText(Constants.TEXT_ENABLE_SUGGESTIONS_ITEM);
+                    MENU_ITEMS.get(Constants.TEXT_ENABLE_HINTS_ITEM).setText(Constants.TEXT_ENABLE_HINTS_ITEM);
+                    MENU_ITEMS.get(Constants.TEXT_ENABLE_HINTS_ITEM).setIcon(new ImageIcon(MENU_ICONS.get(Constants.TEXT_ENABLE_HINTS_ITEM)));
                 }
-                controller.toggleSuggestions();
+                //controller.toggleSuggestions();
             }),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_DISABLE_SUGGESTIONS_ITEM, e -> {
-                if (MENU_ITEMS.get(Constants.TEXT_DISABLE_SUGGESTIONS_ITEM).getText().equals(Constants.TEXT_ENABLE_SUGGESTIONS_ITEM)){
-                    MENU_ITEMS.get(Constants.TEXT_DISABLE_SUGGESTIONS_ITEM).setText(Constants.TEXT_DISABLE_SUGGESTIONS_ITEM);
+            new AbstractMap.SimpleEntry<>(Constants.TEXT_DISABLE_HINTS_ITEM, e -> {
+                if (MENU_ITEMS.get(Constants.TEXT_DISABLE_HINTS_ITEM).getText().equals(Constants.TEXT_DISABLE_HINTS_ITEM)){
+                    MENU_ITEMS.get(Constants.TEXT_DISABLE_HINTS_ITEM).setText(Constants.TEXT_ENABLE_HINTS_ITEM);
+                    MENU_ITEMS.get(Constants.TEXT_ENABLE_HINTS_ITEM).setIcon(new ImageIcon(MENU_ICONS.get(Constants.TEXT_ENABLE_HINTS_ITEM)));
                 } else {
-                    MENU_ITEMS.get(Constants.TEXT_DISABLE_SUGGESTIONS_ITEM).setText(Constants.TEXT_ENABLE_SUGGESTIONS_ITEM);
+                    MENU_ITEMS.get(Constants.TEXT_DISABLE_HINTS_ITEM).setText(Constants.TEXT_DISABLE_HINTS_ITEM);
+                    MENU_ITEMS.get(Constants.TEXT_ENABLE_HINTS_ITEM).setIcon(new ImageIcon(MENU_ICONS.get(Constants.TEXT_DISABLE_HINTS_ITEM)));
                 }
-                controller.toggleSuggestions();
-            }),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_SPELLING_ITEM, e -> controller.correctSpellingFromText()),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_FIND_WORD_ITEM, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    controller.enableFindPanel(true);
-                }
-            }),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_FIND_REPLACE_WORD_ITEM, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    controller.enableFindReplacePanel(true);
-                }
-            }),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_HIDE_PANEL_ITEM, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (MENU_ITEMS.get(Constants.TEXT_HIDE_PANEL_ITEM).getText().equals(Constants.TEXT_HIDE_PANEL_ITEM)){
-                        MENU_ITEMS.get(Constants.TEXT_HIDE_PANEL_ITEM).setText(Constants.TEXT_SHOW_PANEL_ITEM);
-                        controller.enableSidebarPanel(false);
-                    } else {
-                        MENU_ITEMS.get(Constants.TEXT_HIDE_PANEL_ITEM).setText(Constants.TEXT_HIDE_PANEL_ITEM);
-                        controller.enableSidebarPanel(true);
-                    }
-                }
-            }),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_SHOW_PANEL_ITEM, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (MENU_ITEMS.get(Constants.TEXT_SHOW_PANEL_ITEM).getText().equals(Constants.TEXT_SHOW_PANEL_ITEM)){
-                        MENU_ITEMS.get(Constants.TEXT_SHOW_PANEL_ITEM).setText(Constants.TEXT_HIDE_PANEL_ITEM);
-                        controller.enableSidebarPanel(true);
-                    } else {
-                        MENU_ITEMS.get(Constants.TEXT_SHOW_PANEL_ITEM).setText(Constants.TEXT_SHOW_PANEL_ITEM);
-                        controller.enableSidebarPanel(false);
-                    }
-                }
-            }),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_ENABLE_EDIT_ITEM, e -> {
-                if (MENU_ITEMS.get(Constants.TEXT_ENABLE_EDIT_ITEM).getText().equals(Constants.TEXT_ENABLE_EDIT_ITEM)){
-                    MENU_ITEMS.get(Constants.TEXT_ENABLE_EDIT_ITEM).setText(Constants.TEXT_DISABLE_EDIT_ITEM);
-                    controller.enableNotepad(true);
-                } else {
-                    MENU_ITEMS.get(Constants.TEXT_ENABLE_EDIT_ITEM).setText(Constants.TEXT_ENABLE_EDIT_ITEM);
-                    controller.enableNotepad(false);
-                    controller.checkText();
-                }
-            }),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_DISABLE_EDIT_ITEM, e -> {
-                if (MENU_ITEMS.get(Constants.TEXT_DISABLE_EDIT_ITEM).getText().equals(Constants.TEXT_ENABLE_EDIT_ITEM)){
-                    MENU_ITEMS.get(Constants.TEXT_DISABLE_EDIT_ITEM).setText(Constants.TEXT_DISABLE_EDIT_ITEM);
-                    controller.enableNotepad(true);
-                } else {
-                    MENU_ITEMS.get(Constants.TEXT_DISABLE_EDIT_ITEM).setText(Constants.TEXT_ENABLE_EDIT_ITEM);
-                    controller.enableNotepad(false);
-                    controller.checkText();
-                }
+                //controller.toggleSuggestions();
             })
-    );*/
+    );
 }
