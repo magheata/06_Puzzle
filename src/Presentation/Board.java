@@ -42,16 +42,20 @@ public class Board extends JPanel {
         this.setPreferredSize(Constants.DIM_BOARD);
     }
 
-    public void initTiles(){
+    public void initTiles(ArrayList<Tile> tiles){
         int x, y;
         int figureWidth = this.getWidth() / size;
         int figureHeight = this.getHeight() / size;
-        ArrayList<Tile> tiles = controller.getTiles();
         for (int i = 0; i < tiles.size(); i++){
             Tile tile = tiles.get(i);
             x = tile.getPosition().getX() % size;
             y = tile.getPosition().getY() % size;
-            tilesBoard[x][y] = new Figure(controller, x * figureWidth, y * figureHeight, tile.getGoalValue(), figureWidth);
+            if (tile.getImage() != null){
+                tilesBoard[x][y] = new Figure(controller, x * figureWidth, y * figureHeight, tile.getImage(), tile.getGoalValue(), figureWidth);
+            } else {
+                tilesBoard[x][y] = new Figure(controller, x * figureWidth, y * figureHeight, tile.getGoalValue(), figureWidth);
+            }
+
             panels[x][y].add(tilesBoard[x][y]);
             figureForPanel.put(panels[x][y], tilesBoard[x][y]);
         }
@@ -75,15 +79,21 @@ public class Board extends JPanel {
             int yPos = tile.getPosition().getY();
             Figure fig = figureForPanel.get(panels[xPos][yPos]);
             if (tile.getGoalValue() != 0){
-                fig.setText(String.valueOf(tile.getGoalValue()));
-                fig.setOpaque(true);
-                fig.setBackground(Constants.BG_COLOR);
+                if (tile.getImage() == null){
+                    fig.setText(String.valueOf(tile.getGoalValue()));
+                    fig.setOpaque(true);
+                    fig.setBackground(Constants.BG_COLOR);
+                    fig.setForeground(Constants.FG_COLOR);
+                } else {
+                    fig.setImage(tile.getImage());
+                }
             } else {
+                fig.setImage(null);
                 fig.setText("");
                 fig.setOpaque(false);
                 fig.setBackground(Constants.FG_COLOR);
+                fig.setForeground(Constants.FG_COLOR);
             }
-            fig.setForeground(Constants.FG_COLOR);
         }
         this.revalidate();
         this.repaint();
@@ -134,5 +144,16 @@ public class Board extends JPanel {
             }
         }
         return null;
+    }
+
+    public void resetBoard(){
+        figureForPanel.clear();
+        for (int i = 0; i < panels[0].length; i++){
+            for (int j = 0; j< panels[0].length; j++){
+                panels[i][j].removeAll();
+            }
+        }
+        this.removeAll();
+        this.revalidate();
     }
 }

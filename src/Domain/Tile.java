@@ -1,6 +1,7 @@
 /* Created by andreea on 26/05/2020 */
 package Domain;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Tile implements Cloneable{
@@ -9,10 +10,27 @@ public class Tile implements Cloneable{
     private int value, goalValue;
     private Tile leftTile, rightTile, upTile, bottomTile;
 
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
+    private BufferedImage image;
+
     public Tile(Position position, int value, int goalValue) {
         this.position = position;
         this.value = value;
         this.goalValue = goalValue;
+    }
+
+    public Tile(Position position, BufferedImage image, int value, int goalValue) {
+        this.position = position;
+        this.value = value;
+        this.goalValue = goalValue;
+        this.image = image;
     }
 
     public ArrayList<ShiftDirection> possibleMoveDirections(){

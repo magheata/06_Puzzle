@@ -8,8 +8,12 @@ import Domain.Tile;
 import Infrastructure.SolutionService;
 import Presentation.Window;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
@@ -27,7 +31,8 @@ public class Controller {
     private SolutionService solutionService;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    public void prepare() {
+    public void prepare(BufferedImage image) {
+        boardView.resetBoard();
         tiles = new ArrayList<>();
         for (int y = 0; y < size; y++){
             for (int x = 0; x < size; x++){
@@ -37,15 +42,30 @@ public class Controller {
                     goalValue = 0;
                     value = 0;
                 }
-                Tile tile = new Tile(new Position(x, y), value, goalValue);
+                Tile tile;
+                if (image == null){
+                    tile = new Tile(new Position(x, y), value, goalValue);
+                } else {
+                    tile = new Tile(new Position(x, y),
+                            image.getSubimage(x * Constants.TILE_SIZE,
+                                    y * Constants.TILE_SIZE,
+                                    Constants.TILE_SIZE,
+                                    Constants.TILE_SIZE),
+                            value,
+                            goalValue);
+                }
                 tiles.add(tile);
             }
         }
         board = new Board(tiles, size);
         board.setNeighbourTiles(tiles);
-        boardView.initTiles();
+        boardView.initTiles(tiles);
     }
 
+    public void shuffleTiles(){
+        board.resetTiles();
+        shuffleInitialTiles();
+    }
     public void shuffleInitialTiles() {
         executor.submit(() -> {
             ArrayList<ShiftDirection> moves = new ArrayList<>();
@@ -70,11 +90,20 @@ public class Controller {
     }
 
     private void performAIMoves() {
+        Board auxBoard = new Board(board.getTiles(), board.getSize());
+
         solutionService = new SolutionService(board.getTiles(), board.getSize());
         Future<ArrayList<ShiftDirection>> winningMoves = solutionService.getWinningNodes();
         while (!winningMoves.isDone()){}
         try {
+            ArrayList<ShiftDirection> moves = winningMoves.get();
             System.out.println(winningMoves.get());
+            for (ShiftDirection move : moves){
+                auxBoard.shift(move);
+                boardView.updateFigures(auxBoard.getTiles());
+                Thread.sleep(500);
+            }
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -116,5 +145,26 @@ public class Controller {
         System.out.println(board.getBlankTile().possibleMoveDirections());
         boardView.moveBlankTile(positions);
         boardView.updateTilePos(positions);
+    }
+
+    public void importImage() {
+        JFileChooser fileChooser = new JFileChooser();
+        switch (fileChooser.showOpenDialog(window)) {
+            case JFileChooser.APPROVE_OPTION:
+                try {
+                    BufferedImage auxImage = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath()));
+                    BufferedImage resized = new BufferedImage(Constants.WIDTH_BOARD, Constants.HEIGHT_BOARD, auxImage.getType());
+                    Graphics2D g = resized.createGraphics();
+                    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                            RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                    g.drawImage(auxImage, 0, 0, Constants.WIDTH_BOARD, Constants.HEIGHT_BOARD, 0, 0, auxImage.getWidth(),
+                            auxImage.getHeight(), null);
+                    g.dispose();
+                    prepare(resized);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
     }
 }

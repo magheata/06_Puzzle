@@ -73,9 +73,9 @@ public class MenuBuilder {
 
 
     public static final Map<String, ActionListener> MENU_ACTIONLISTENERS = Map.ofEntries(
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_NEW_PUZZLE_ITEM, e -> controller.prepare()),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_IMPORT_PUZZLE_ITEM, e -> System.out.println()),
-            new AbstractMap.SimpleEntry<>(Constants.TEXT_SHUFFLE_ITEM, e -> controller.shuffleInitialTiles()),
+            new AbstractMap.SimpleEntry<>(Constants.TEXT_NEW_PUZZLE_ITEM, e -> controller.prepare(null)),
+            new AbstractMap.SimpleEntry<>(Constants.TEXT_IMPORT_PUZZLE_ITEM, e -> controller.importImage()),
+            new AbstractMap.SimpleEntry<>(Constants.TEXT_SHUFFLE_ITEM, e -> controller.shuffleTiles()),
             new AbstractMap.SimpleEntry<>(Constants.TEXT_SOLVE_ITEM, e -> controller.solvePuzzle()),
             new AbstractMap.SimpleEntry<>(Constants.TEXT_RESET_ITEM, e -> System.out.println()),
             new AbstractMap.SimpleEntry<>(Constants.TEXT_ENABLE_HINTS_ITEM, e -> {

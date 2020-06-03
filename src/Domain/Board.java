@@ -1,6 +1,8 @@
 /* Created by andreea on 26/05/2020 */
 package Domain;
 
+import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +29,11 @@ public class Board {
             tileForValue.put(tile.getGoalValue(), tile);
             tileForPosition.put(tile.getPosition(), tile);
         }
+    }
+
+    public void resetTiles() {
+        initTileVariables();
+        setNeighbourTiles(tiles);
     }
 
     public boolean getIsWinning() {

@@ -19,6 +19,15 @@ public class Figure extends JButton implements ActionListener{
     private int xPos, yPos;
     private int value;
     private int dimension;
+
+    public void setImage(Image image) {
+        if (image != null){
+            this.setIcon(new ImageIcon(image));
+        } else {
+            this.setIcon(null);
+        }
+    }
+
     private Controller controller;
 
     public Figure(int xSolPos, int ySolPos, ImageIcon subimage, int dimension){
@@ -49,6 +58,22 @@ public class Figure extends JButton implements ActionListener{
             this.setBackground(Constants.BG_COLOR);
             this.setForeground(Constants.FG_COLOR);
             this.setText(String.valueOf(value));
+        }
+        this.addActionListener(this);
+    }
+
+    public Figure(Controller controller, int xSolPos, int ySolPos, Image image, int value, int dimension){
+        this.dimension = dimension;
+        this.value = value;
+        this.controller = controller;
+        xPos = xSolPos;
+        yPos = ySolPos;
+        this.setSize(new Dimension(dimension, dimension));
+        this.setMinimumSize(new Dimension(dimension, dimension));
+        this.setPreferredSize(new Dimension(dimension, dimension));
+
+        if (value != 0){
+            this.setIcon(new ImageIcon(image));
         }
         this.addActionListener(this);
     }
