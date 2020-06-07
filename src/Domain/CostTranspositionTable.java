@@ -1,8 +1,15 @@
-/* Created by andreea on 26/05/2020 */
+/**
+ * AUTHORS: RAFAEL ADRIÁN GIL CAÑESTRO
+ *          MIRUNA ANDREEA GHEATA
+ */
 package Domain;
 
+import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class used to save the cost of the Nodes
+ */
 public final class CostTranspositionTable {
-    protected static Map<Node, Integer> transpositionTable;
+    public static Map<Node, Integer> transpositionTable = new HashMap<>();
 }

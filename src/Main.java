@@ -1,10 +1,14 @@
-/* Created by andreea on 26/05/2020 */
+/**
+ * AUTHORS: RAFAEL ADRIÁN GIL CAÑESTRO
+ *          MIRUNA ANDREEA GHEATA
+ */
 
 import Application.Controller;
+import Presentation.Window;
 
 public class Main {
     public static void main(String[] args) {
         Controller controller = new Controller();
-        controller.start();
+        controller.setWindow(new Window(controller));
     }
 }

@@ -1,4 +1,7 @@
-/* Created by andreea on 26/05/2020 */
+/**
+ * AUTHORS: RAFAEL ADRIÁN GIL CAÑESTRO
+ *          MIRUNA ANDREEA GHEATA
+ */
 package Domain;
 
 public class Position {
