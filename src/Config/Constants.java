@@ -1,14 +1,24 @@
-/* Created by andreea on 26/05/2020 */
+/**
+ * AUTHORS: RAFAEL ADRIÁN GIL CAÑESTRO
+ *          MIRUNA ANDREEA GHEATA
+ */
 package Config;
 
-import java.awt.*;
+import Domain.ShiftDirection;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+/**
+ * Constants used in the project
+ */
 public class Constants {
 
     public static int DEFAULT_BOARD_SIZE = 3;
 
     public static int WIDTH_WINDOW = 600;
-    public static int HEIGHT_WINDOW = 645;
+    public static int HEIGHT_WINDOW = 675;
     public static int WIDTH_BOARD = 600;
     public static int HEIGHT_BOARD = 600;
 
@@ -24,25 +34,23 @@ public class Constants {
     public static String TEXT_TOOLS_MENU = "Tools";
     public static String TEXT_SOLVE_ITEM = "Solve puzzle";
     public static String TEXT_SHUFFLE_ITEM = "Shuffle tiles";
-    public static String TEXT_RESET_ITEM = "Reset puzzle";
 
     public static String TEXT_ENABLE_HINTS_ITEM = "Enable hints";
     public static String TEXT_DISABLE_HINTS_ITEM = "Disable hints";
-
-    public static String TEXT_PREFERENCES_MENU = "Preferences";
-    public static String TEXT_ALGORITHM_ITEM = "Algorithm...";
 
     public final static String PATH_NEW_PUZZLE_ICON = "src/Presentation/Images/new.png";
     public final static String PATH_IMPORT_PUZZLE_ICON = "src/Presentation/Images/import.png";
     public final static String PATH_SOLVE_ICON = "src/Presentation/Images/solve.png";
     public final static String PATH_SHUFFLE_ICON = "src/Presentation/Images/shuffle.png";
-    public final static String PATH_RESET_ICON = "src/Presentation/Images/reset.png";
     public final static String PATH_ENABLED_HINTS_ICON = "src/Presentation/Images/hint.png";
     public final static String PATH_DISABLED_HINTS_ICON = "src/Presentation/Images/disabled_hint.png";
-    public final static String PATH_ALGORITHM_ICON = "src/Presentation/Images/algorithm.png";
-
 
     public static final Color FG_COLOR = new Color(0xFFFFFF);
     public static final Color BG_COLOR = new Color(0x3B5998);
 
+    public static final ArrayList<ShiftDirection> POSSIBLE_MOVES = new ArrayList<>(Arrays.asList(
+            ShiftDirection.UP,
+            ShiftDirection.DOWN,
+            ShiftDirection.LEFT,
+            ShiftDirection.RIGHT));
 }

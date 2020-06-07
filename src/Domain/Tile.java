@@ -1,23 +1,17 @@
-/* Created by andreea on 26/05/2020 */
+/**
+ * AUTHORS: RAFAEL ADRIÁN GIL CAÑESTRO
+ *          MIRUNA ANDREEA GHEATA
+ */
 package Domain;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class Tile implements Cloneable{
+public class Tile implements Cloneable {
 
     private Position position;
     private int value, goalValue;
     private Tile leftTile, rightTile, upTile, bottomTile;
-
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    public void setImage(BufferedImage image) {
-        this.image = image;
-    }
-
     private BufferedImage image;
 
     public Tile(Position position, int value, int goalValue) {
@@ -33,41 +27,41 @@ public class Tile implements Cloneable{
         this.image = image;
     }
 
-    public ArrayList<ShiftDirection> possibleMoveDirections(){
+    public ArrayList<ShiftDirection> possibleMoveDirections() {
         ArrayList<ShiftDirection> possibleMoveDirections = new ArrayList<>();
-        if (upTile != null){
+        if (upTile != null) {
             possibleMoveDirections.add(ShiftDirection.DOWN);
         }
-        if (bottomTile != null){
+        if (bottomTile != null) {
             possibleMoveDirections.add(ShiftDirection.UP);
         }
-        if (leftTile != null){
+        if (leftTile != null) {
             possibleMoveDirections.add(ShiftDirection.RIGHT);
         }
-        if (rightTile != null){
+        if (rightTile != null) {
             possibleMoveDirections.add(ShiftDirection.LEFT);
         }
         return possibleMoveDirections;
     }
 
-    public boolean equals (Tile tile){
-        if (tile != null){
+    public boolean equals(Tile tile) {
+        if (tile != null) {
             return (this.position.getX() == tile.position.getX()) && (this.position.getY() == tile.position.getY());
         }
         return false;
     }
 
-    public ShiftDirection isTileNeighbour(Tile tile){
-        if (tile.equals(upTile)){
+    public ShiftDirection isTileNeighbour(Tile tile) {
+        if (tile.equals(upTile)) {
             return ShiftDirection.DOWN;
         }
-        if (tile.equals(rightTile)){
+        if (tile.equals(rightTile)) {
             return ShiftDirection.LEFT;
         }
-        if (tile.equals(bottomTile)){
+        if (tile.equals(bottomTile)) {
             return ShiftDirection.UP;
         }
-        if (tile.equals(leftTile)){
+        if (tile.equals(leftTile)) {
             return ShiftDirection.RIGHT;
         }
         return null;
@@ -76,13 +70,10 @@ public class Tile implements Cloneable{
     @Override
     protected Object clone() {
         Tile clone;
-        try
-        {
+        try {
             clone = (Tile) super.clone();
             //Copy new date object to cloned method
-        }
-        catch (CloneNotSupportedException e)
-        {
+        } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
         return clone;
@@ -96,6 +87,10 @@ public class Tile implements Cloneable{
     //region SETTERS & GETTERS
     public Position getPosition() {
         return position;
+    }
+
+    public BufferedImage getImage() {
+        return image;
     }
 
     public void setPosition(Position position) {
@@ -112,10 +107,6 @@ public class Tile implements Cloneable{
 
     public int getGoalValue() {
         return goalValue;
-    }
-
-    public void setGoalValue(int goalValue) {
-        this.goalValue = goalValue;
     }
 
     public Tile getLeftTile() {
@@ -149,5 +140,20 @@ public class Tile implements Cloneable{
     public void setBottomTile(Tile bottomTile) {
         this.bottomTile = bottomTile;
     }
+
+    public Tile getSwappedTile(ShiftDirection move) {
+        switch (move) {
+            case UP:
+                return bottomTile;
+            case DOWN:
+                return upTile;
+            case LEFT:
+                return rightTile;
+            case RIGHT:
+                return leftTile;
+        }
+        return null;
+    }
     //endregion
+
 }

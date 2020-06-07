@@ -1,8 +1,9 @@
-/* Created by andreea on 26/05/2020 */
+/**
+ * AUTHORS: RAFAEL ADRIÁN GIL CAÑESTRO
+ *          MIRUNA ANDREEA GHEATA
+ */
 package Domain;
 
-import javax.swing.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -150,10 +151,6 @@ public class Board {
                 previousMove = move;
             }
         }
-        System.out.println(getBlankTile().getPosition());
-        System.out.println(this);
-        System.out.println("Total moves: " + movesCount);
-        System.out.println("Done shuffling");
         movesCount = 0;
     }
 

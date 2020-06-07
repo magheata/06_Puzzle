@@ -1,4 +1,7 @@
-/* Created by andreea on 26/05/2020 */
+/**
+ * AUTHORS: RAFAEL ADRIÁN GIL CAÑESTRO
+ *          MIRUNA ANDREEA GHEATA
+ */
 package Infrastructure;
 
 import Domain.Node;
@@ -7,36 +10,35 @@ import Domain.Tile;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class SolutionService {
 
     private Node startingNode;
-    private ExecutorService executor;
+
     public SolutionService(ArrayList<Tile> grid, int size) {
         this.startingNode = new Node(grid, size);
-        executor = Executors.newSingleThreadExecutor();
     }
 
-    public Future<ArrayList<ShiftDirection>> getWinningNodes(){
-        return executor.submit(() -> idaWinningMoves());
+    public ArrayList<ShiftDirection> getWinningNodes(){
+        return idaWinningMoves();
     }
 
     private ArrayList<ShiftDirection> idaWinningMoves() {
-        int threshold = startingNode.cost();
-        Node node = startingNode;
-        while(!node.isSolution()){
-            node = ida(startingNode, 0, threshold);
-            if (!node.isSolution()){
-                threshold = node.getEstimatedMinimumCost();
+        try{
+            int threshold = startingNode.cost();
+            Node node = startingNode;
+            while(!node.isSolution()){
+                node = ida(startingNode, 0, threshold);
+                if (!node.isSolution()){
+                    threshold = node.getEstimatedMinimumCost();
+                }
             }
+            ArrayList<ShiftDirection> moves = recreatePathFrom(node);
+            Collections.reverse(moves);
+            return moves;
+        } catch (OutOfMemoryError error){
         }
-        System.out.println("Done");
-        ArrayList<ShiftDirection> moves = recreatePathFrom(node);
-        Collections.reverse(moves);
-        return moves;
+        return null;
     }
 
     private Node ida (Node node, int cost, int threshold){

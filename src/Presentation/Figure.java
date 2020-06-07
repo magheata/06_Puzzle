@@ -1,4 +1,7 @@
-/* Created by andreea on 02/06/2020 */
+/**
+ * AUTHORS: RAFAEL ADRIÁN GIL CAÑESTRO
+ *          MIRUNA ANDREEA GHEATA
+ */
 package Presentation;
 
 import Application.Controller;
@@ -18,31 +21,9 @@ public class Figure extends JButton implements ActionListener{
 
     private int xPos, yPos;
     private int value;
-    private int dimension;
-
-    public void setImage(Image image) {
-        if (image != null){
-            this.setIcon(new ImageIcon(image));
-        } else {
-            this.setIcon(null);
-        }
-    }
-
     private Controller controller;
 
-    public Figure(int xSolPos, int ySolPos, ImageIcon subimage, int dimension){
-        this.dimension = dimension;
-
-        xPos = xSolPos;
-        yPos = ySolPos;
-
-        this.setIcon(subimage);
-        this.setPreferredSize(new Dimension(subimage.getIconWidth(), subimage.getIconHeight()));
-        this.addActionListener(this);
-    }
-
     public Figure(Controller controller, int xSolPos, int ySolPos, int value, int dimension){
-        this.dimension = dimension;
         this.value = value;
         this.controller = controller;
         xPos = xSolPos;
@@ -63,7 +44,6 @@ public class Figure extends JButton implements ActionListener{
     }
 
     public Figure(Controller controller, int xSolPos, int ySolPos, Image image, int value, int dimension){
-        this.dimension = dimension;
         this.value = value;
         this.controller = controller;
         xPos = xSolPos;
@@ -76,6 +56,29 @@ public class Figure extends JButton implements ActionListener{
             this.setIcon(new ImageIcon(image));
         }
         this.addActionListener(this);
+    }
+
+    @Override
+    public String toString() {
+        return "{"  + value +
+                "} ";
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+        Object[] result = controller.checkIfCanMove(xPos / Constants.TILE_SIZE, yPos / Constants.TILE_SIZE);
+        if (result != null){
+            controller.swapTiles((ShiftDirection) result[0], (Position[]) result[1]);
+        }
+    }
+
+    //region GETTERS & SETTERS
+    public void setImage(Image image) {
+        if (image != null){
+            this.setIcon(new ImageIcon(image));
+        } else {
+            this.setIcon(null);
+        }
     }
 
     public int getxPos() {
@@ -93,18 +96,5 @@ public class Figure extends JButton implements ActionListener{
     public void setyPos(int yPos) {
         this.yPos = yPos;
     }
-
-    @Override
-    public String toString() {
-        return "{"  + value +
-                "} ";
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-        Object[] result = controller.checkIfCanMove(xPos / Constants.TILE_SIZE, yPos / Constants.TILE_SIZE);
-        if (result != null){
-            controller.swapTiles((ShiftDirection) result[0], (Position[]) result[1]);
-        }
-    }
+    //endregion
 }

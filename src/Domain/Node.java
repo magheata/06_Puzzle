@@ -1,4 +1,7 @@
-/* Created by andreea on 26/05/2020 */
+/**
+ * AUTHORS: RAFAEL ADRIÁN GIL CAÑESTRO
+ *          MIRUNA ANDREEA GHEATA
+ */
 package Domain;
 
 import java.util.ArrayList;
@@ -12,7 +15,6 @@ public class Node {
     private Node previousNode;
     private Board board;
     private int estimatedMinimumCost = Integer.MAX_VALUE;
-    private boolean okay = false;
 
     public Node(ArrayList<Tile> grid, int size) {
         this.grid = grid;
@@ -55,21 +57,10 @@ public class Node {
         return board;
     }
 
-    public ArrayList<Tile> getGrid() {
-        return grid;
-    }
-
-    public void setGrid(ArrayList<Tile> grid) {
-        this.grid = grid;
-    }
-
     public int getSize() {
         return size;
     }
 
-    public void setSize(int size) {
-        this.size = size;
-    }
 
     public ShiftDirection getPreviousMove() {
         return previousMove;
@@ -85,18 +76,6 @@ public class Node {
 
     public void setPreviousNode(Node previousNode) {
         this.previousNode = previousNode;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
-    public boolean isOkay() {
-        return okay;
-    }
-
-    public void setOkay(boolean okay) {
-        this.okay = okay;
     }
     //endregion
 }

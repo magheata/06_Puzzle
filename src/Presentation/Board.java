@@ -1,4 +1,7 @@
-/* Created by andreea on 01/06/2020 */
+/**
+ * AUTHORS: RAFAEL ADRIÁN GIL CAÑESTRO
+ *          MIRUNA ANDREEA GHEATA
+ */
 package Presentation;
 
 import Application.Controller;
@@ -9,16 +12,13 @@ import Domain.Tile;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class Board extends JPanel {
-    private Figure[][] tilesBoard;
+    private Figure[][] figuresBoard;
     private JPanel[][] panels;
     private Map<JPanel, Figure> figureForPanel = new HashMap<>();
-    private Figure tileToMove;
+    private Map<Integer, Figure> figureForValue = new HashMap<>();
     private int size;
     private Controller controller;
 
@@ -26,7 +26,7 @@ public class Board extends JPanel {
         this.controller = controller;
         this.controller.setBoardView(this);
         size = this.controller.getSize();
-        tilesBoard = new Figure[size][size];
+        figuresBoard = new Figure[size][size];
         panels = new JPanel[size][size];
         for (int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
@@ -51,27 +51,18 @@ public class Board extends JPanel {
             x = tile.getPosition().getX() % size;
             y = tile.getPosition().getY() % size;
             if (tile.getImage() != null){
-                tilesBoard[x][y] = new Figure(controller, x * figureWidth, y * figureHeight, tile.getImage(), tile.getGoalValue(), figureWidth);
+                figuresBoard[x][y] = new Figure(controller, x * figureWidth, y * figureHeight, tile.getImage(), tile.getGoalValue(), figureWidth);
             } else {
-                tilesBoard[x][y] = new Figure(controller, x * figureWidth, y * figureHeight, tile.getGoalValue(), figureWidth);
+                figuresBoard[x][y] = new Figure(controller, x * figureWidth, y * figureHeight, tile.getGoalValue(), figureWidth);
             }
-
-            panels[x][y].add(tilesBoard[x][y]);
-            figureForPanel.put(panels[x][y], tilesBoard[x][y]);
+            figureForValue.put(tile.getGoalValue(), figuresBoard[x][y]);
+            panels[x][y].add(figuresBoard[x][y]);
+            figureForPanel.put(panels[x][y], figuresBoard[x][y]);
         }
-        for (int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++){
-                GridBagConstraints constraints = new GridBagConstraints();
-                constraints.gridx = i;
-                constraints.gridy = j;
-                this.add(panels[i][j], constraints);
-            }
-        }
-        this.revalidate();
-        this.repaint();
+        addTilesToBoard();
     }
 
-    public void updateFigures(ArrayList<Tile> tiles) {
+    public void repaintFigures(ArrayList<Tile> tiles) {
         Iterator it = tiles.iterator();
         while (it.hasNext()){
             Tile tile = (Tile) it.next();
@@ -95,46 +86,33 @@ public class Board extends JPanel {
                 fig.setForeground(Constants.FG_COLOR);
             }
         }
+
         this.revalidate();
         this.repaint();
     }
 
-
-
-    public void moveBlankTile(Position[] positions) {
-        Rectangle from = new Rectangle(positions[1].getX() * Constants.TILE_SIZE,
-                positions[1].getY() * Constants.TILE_SIZE,
-                Constants.TILE_SIZE,
-                Constants.TILE_SIZE);
-        Rectangle to = new Rectangle(positions[0].getX() * Constants.TILE_SIZE,
-                positions[0].getY() * Constants.TILE_SIZE,
-                Constants.TILE_SIZE,
-                Constants.TILE_SIZE);
-        AnimatePanel animate = new AnimatePanel(panels[positions[1].getX()][positions[1].getY()], from, to);
-        animate.start();
-    }
-
     public void updateTilePos(Position[] positions) {
+
         Position blankTilePos = positions[0];
         Position swappedTilePos = positions[1];
 
-        Figure blankTile = tilesBoard[blankTilePos.getX()][blankTilePos.getY()];
-        Figure swappedTile = tilesBoard[swappedTilePos.getX()][swappedTilePos.getY()];
+        Figure blankFigure = figuresBoard[blankTilePos.getX()][blankTilePos.getY()];
+        Figure swappedFigure = figuresBoard[swappedTilePos.getX()][swappedTilePos.getY()];
 
-        int xAux = blankTile.getxPos();
-        int yAux = blankTile.getyPos();
+        int xAux = blankFigure.getxPos();
+        int yAux = blankFigure.getyPos();
 
-        blankTile.setxPos(swappedTile.getxPos());
-        blankTile.setyPos(swappedTile.getyPos());
+        blankFigure.setxPos(swappedFigure.getxPos());
+        blankFigure.setyPos(swappedFigure.getyPos());
 
-        swappedTile.setxPos(xAux);
-        swappedTile.setyPos(yAux);
+        swappedFigure.setxPos(xAux);
+        swappedFigure.setyPos(yAux);
 
-        tilesBoard[swappedTilePos.getX()][swappedTilePos.getY()] = blankTile;
-        tilesBoard[blankTilePos.getX()][blankTilePos.getY()] = swappedTile;
+        figuresBoard[swappedTilePos.getX()][swappedTilePos.getY()] = blankFigure;
+        figuresBoard[blankTilePos.getX()][blankTilePos.getY()] = swappedFigure;
 
-        panels[swappedTilePos.getX()][swappedTilePos.getY()] = getPanelForFigure(blankTile);
-        panels[blankTilePos.getX()][blankTilePos.getY()] = getPanelForFigure(swappedTile);
+        panels[swappedTilePos.getX()][swappedTilePos.getY()] = getPanelForFigure(blankFigure);
+        panels[blankTilePos.getX()][blankTilePos.getY()] = getPanelForFigure(swappedFigure);
     }
 
     private JPanel getPanelForFigure(Figure fig){
@@ -148,6 +126,7 @@ public class Board extends JPanel {
 
     public void resetBoard(){
         figureForPanel.clear();
+        figureForValue.clear();
         for (int i = 0; i < panels[0].length; i++){
             for (int j = 0; j< panels[0].length; j++){
                 panels[i][j].removeAll();
@@ -155,5 +134,54 @@ public class Board extends JPanel {
         }
         this.removeAll();
         this.revalidate();
+    }
+
+    public void enableFigureButtons(boolean enabled){
+        Object[] figures = figureForPanel.entrySet().toArray();
+        for (int i = 0; i < figures.length; i++){
+            Map.Entry<JPanel, Figure> figure = (Map.Entry<JPanel, Figure>) figures[i];
+            figure.getValue().setEnabled(enabled);
+            figure.getValue().setForeground(Constants.FG_COLOR);
+        }
+    }
+
+    public void updateFiguresInPanels(ArrayList<Tile> tiles){
+        int x, y;
+        for (int i = 0; i < tiles.size(); i++){
+            Tile tile = tiles.get(i);
+
+            x = tile.getPosition().getX() % size;
+            y = tile.getPosition().getY() % size;
+
+            Figure figure = figureForValue.get(tile.getGoalValue());
+
+            figure.setxPos(x * Constants.TILE_SIZE);
+            figure.setyPos(y * Constants.TILE_SIZE);
+
+            figuresBoard[x][y] = figure;
+
+            figureForPanel.remove(panels[x][y]);
+            panels[x][y].removeAll();
+
+            panels[x][y].add(figuresBoard[x][y]);
+            figureForPanel.put(panels[x][y], figuresBoard[x][y]);
+        }
+        addTilesToBoard();
+    }
+
+    private void addTilesToBoard(){
+        SwingUtilities.invokeLater(() -> {
+            for (int i = 0; i < size; i++){
+                for (int j = 0; j < size; j++){
+                    GridBagConstraints constraints = new GridBagConstraints();
+                    constraints.gridx = i;
+                    constraints.gridy = j;
+                    this.add(panels[i][j], constraints);
+
+                }
+            }
+            this.repaint();
+            this.revalidate();
+        });
     }
 }
