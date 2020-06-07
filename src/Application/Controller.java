@@ -16,6 +16,7 @@ import Presentation.Window;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -71,7 +72,10 @@ public class Controller implements IController {
      */
     @Override
     public void importImage() {
-        JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
+        fileChooser.setFileFilter(new FileNameExtensionFilter("PNG", "png"));
+        fileChooser.setFileFilter(new FileNameExtensionFilter("JPG", "jpg"));
+
         switch (fileChooser.showOpenDialog(window)) {
             case JFileChooser.APPROVE_OPTION:
                 try {
