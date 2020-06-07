@@ -12,6 +12,7 @@ import Domain.Position;
 import Domain.ShiftDirection;
 import Domain.Tile;
 import Infrastructure.SolutionService;
+import Presentation.MenuBuilder;
 import Presentation.Window;
 
 import javax.imageio.ImageIO;
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static Presentation.MenuBuilder.MENU_ITEMS;
 
 /**
  * Class that acts as the controller of the application. It is used in order to manage the communications between the
@@ -96,6 +99,9 @@ public class Controller implements IController {
                 }
                 break;
         }
+        hintsEnabled = false;
+        MENU_ITEMS.get(Constants.TEXT_ENABLE_HINTS_ITEM).setText(Constants.TEXT_ENABLE_HINTS_ITEM);
+        MENU_ITEMS.get(Constants.TEXT_ENABLE_HINTS_ITEM).setIcon(new ImageIcon(MenuBuilder.MENU_ICONS.get(Constants.TEXT_ENABLE_HINTS_ITEM)));
     }
 
     /**
@@ -104,6 +110,9 @@ public class Controller implements IController {
      */
     @Override
     public void prepare(BufferedImage image) {
+        window.showHint(false);
+        window.enableSolveInMenu(false);
+        window.enableHintInMenu(false);
         executor.submit(() -> {
             boardView.resetBoard();
             initTiles(image);
