@@ -7,6 +7,11 @@ package Domain;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+/**
+ * Class that represents a Tile in the Board. The Tile has:
+ *      - value: current value of the Tile
+ *      - goalValue: desired value for the tile (for example value could be 1 but the goalValue might be 2)
+ */
 public class Tile implements Cloneable {
 
     private Position position;
@@ -14,12 +19,25 @@ public class Tile implements Cloneable {
     private Tile leftTile, rightTile, upTile, bottomTile;
     private BufferedImage image;
 
+    /**
+     * Constructor used when the tile is numbered
+     * @param position
+     * @param value
+     * @param goalValue
+     */
     public Tile(Position position, int value, int goalValue) {
         this.position = position;
         this.value = value;
         this.goalValue = goalValue;
     }
 
+    /**
+     * Constructor used when the tile has an image
+     * @param position
+     * @param image
+     * @param value
+     * @param goalValue
+     */
     public Tile(Position position, BufferedImage image, int value, int goalValue) {
         this.position = position;
         this.value = value;
@@ -27,6 +45,10 @@ public class Tile implements Cloneable {
         this.image = image;
     }
 
+    /**
+     * Method used to know in which directions the tile can move
+     * @return list of moves that the Tile can make
+     */
     public ArrayList<ShiftDirection> possibleMoveDirections() {
         ArrayList<ShiftDirection> possibleMoveDirections = new ArrayList<>();
         if (upTile != null) {
@@ -51,6 +73,11 @@ public class Tile implements Cloneable {
         return false;
     }
 
+    /**
+     * Method used to know if the tile passed through parameter is the neighbour of this tile
+     * @param tile tile to check
+     * @return move that can be made
+     */
     public ShiftDirection isTileNeighbour(Tile tile) {
         if (tile.equals(upTile)) {
             return ShiftDirection.DOWN;

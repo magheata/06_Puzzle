@@ -7,6 +7,9 @@ package Domain;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Class used to represent the state of the board given a list of tiles, the move made, and its cost
+ */
 public class Node {
 
     private ArrayList<Tile> grid;
@@ -24,9 +27,13 @@ public class Node {
     }
 
     public boolean isSolution(){
-        return board.getIsWinning();
+        return board.getIsSolved();
     }
 
+    /**
+     * Method used to get the cost of the node
+     * @return
+     */
     public int cost(){
         if (CostTranspositionTable.transpositionTable.get(this) == null){
             CostTranspositionTable.transpositionTable.put(this, board.getManhattanDistance());

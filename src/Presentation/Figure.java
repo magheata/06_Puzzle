@@ -17,6 +17,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
+/**
+ * Class that represents the Tile. It is a JButton
+ */
 public class Figure extends JButton implements ActionListener{
 
     private int xPos, yPos;
@@ -66,8 +69,10 @@ public class Figure extends JButton implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
+        // Check if the tile can be moved
         Object[] result = controller.checkIfCanMove(xPos / Constants.TILE_SIZE, yPos / Constants.TILE_SIZE);
         if (result != null){
+            // Swap the tile and the blank tile
             controller.swapTiles((ShiftDirection) result[0], (Position[]) result[1]);
         }
     }

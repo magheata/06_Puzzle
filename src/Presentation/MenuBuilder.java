@@ -14,6 +14,9 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.*;
 
+/**
+ * Class that helps build the menu
+ */
 public class MenuBuilder {
 
     public static Controller controller;

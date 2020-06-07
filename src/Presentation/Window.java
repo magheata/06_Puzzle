@@ -112,11 +112,11 @@ public class Window extends JFrame {
         hintLabel.setText("Next move:  " + tile);
     }
 
-    public void enableHint(boolean enabled){
+    public void enableHintInMenu(boolean enabled){
         MENU_ITEMS.get(Constants.TEXT_ENABLE_HINTS_ITEM).setEnabled(enabled);
     }
 
-    public void enableSolve(boolean enabled){
+    public void enableSolveInMenu(boolean enabled){
         MENU_ITEMS.get(Constants.TEXT_SOLVE_ITEM).setEnabled(enabled);
     }
 

@@ -15,6 +15,8 @@ import java.util.Arrays;
  */
 public class Constants {
 
+    public static int PAUSE_DURATION = 300;
+
     public static int DEFAULT_BOARD_SIZE = 3;
 
     public static int WIDTH_WINDOW = 600;

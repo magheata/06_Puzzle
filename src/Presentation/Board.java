@@ -14,9 +14,12 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.*;
 
+/**
+ * Class that represents the View of the Board
+ */
 public class Board extends JPanel {
-    private Figure[][] figuresBoard;
-    private JPanel[][] panels;
+    private Figure[][] figuresBoard; /*Array that contains the figures of the board */
+    private JPanel[][] panels; /*Array that contains the panels for each Figure*/
     private Map<JPanel, Figure> figureForPanel = new HashMap<>();
     private Map<Integer, Figure> figureForValue = new HashMap<>();
     private int size;
@@ -42,6 +45,10 @@ public class Board extends JPanel {
         this.setPreferredSize(Constants.DIM_BOARD);
     }
 
+    /**
+     * Method that initializes the tiles' parameters and creates the Figure for each Tile
+     * @param tiles
+     */
     public void initTiles(ArrayList<Tile> tiles){
         int x, y;
         int figureWidth = this.getWidth() / size;
@@ -62,6 +69,10 @@ public class Board extends JPanel {
         addTilesToBoard();
     }
 
+    /**
+     * Method that repaints the tiles in the board in the specific positions
+     * @param tiles
+     */
     public void repaintFigures(ArrayList<Tile> tiles) {
         Iterator it = tiles.iterator();
         while (it.hasNext()){
@@ -91,6 +102,10 @@ public class Board extends JPanel {
         this.repaint();
     }
 
+    /**
+     * Used to update the tiles' parameters and lists in order to reflect the new positions
+     * @param positions
+     */
     public void updateTilePos(Position[] positions) {
 
         Position blankTilePos = positions[0];
@@ -115,6 +130,11 @@ public class Board extends JPanel {
         panels[blankTilePos.getX()][blankTilePos.getY()] = getPanelForFigure(swappedFigure);
     }
 
+    /**
+     * Returns the JPanel for the given Figure
+     * @param fig
+     * @return
+     */
     private JPanel getPanelForFigure(Figure fig){
         for (Map.Entry<JPanel, Figure> entry : figureForPanel.entrySet()) {
             if (fig == (entry.getValue())) {
@@ -124,6 +144,9 @@ public class Board extends JPanel {
         return null;
     }
 
+    /**
+     * Resets the boards' parameters
+     */
     public void resetBoard(){
         figureForPanel.clear();
         figureForValue.clear();
@@ -145,6 +168,10 @@ public class Board extends JPanel {
         }
     }
 
+    /**
+     * Updates all the figures for the tiles in th board
+     * @param tiles
+     */
     public void updateFiguresInPanels(ArrayList<Tile> tiles){
         int x, y;
         for (int i = 0; i < tiles.size(); i++){
@@ -169,6 +196,9 @@ public class Board extends JPanel {
         addTilesToBoard();
     }
 
+    /**
+     * Method that adds the panels for all figures to the board
+     */
     private void addTilesToBoard(){
         SwingUtilities.invokeLater(() -> {
             for (int i = 0; i < size; i++){
